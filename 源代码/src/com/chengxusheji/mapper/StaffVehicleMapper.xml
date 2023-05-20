@@ -1,0 +1,48 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.StaffVehicleMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加职工车辆记录 -->
+	<insert id="addStaffVehicle" parameterType="staffVehicle">
+		insert into t_staffVehicle(teacherName,carNo,vehiclePhoto,leftDays,carDesc) values 
+		(#{teacherName},#{carNo},#{vehiclePhoto},#{leftDays},#{carDesc})
+	</insert>
+
+	<!-- 按照查询条件分页查询职工车辆记录 -->
+	<select id="queryStaffVehicle" resultMap="staffVehicleMap" >
+		select t_staffVehicle.* from t_staffVehicle ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="staffVehicleMap" type="staffVehicle">
+        <id property="carId" column="carId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有职工车辆记录 -->
+	<select id="queryStaffVehicleList" resultMap="staffVehicleMap" >
+		select t_staffVehicle.* from t_staffVehicle ${where}
+	</select>
+
+    <!-- 按照查询条件的职工车辆记录数 -->
+	<select id="queryStaffVehicleCount" resultType="int">
+		select count(*) from t_staffVehicle ${where}
+	</select>
+
+	<!-- 根据主键查询某个职工车辆记录 -->
+	<select id="getStaffVehicle" parameterType="int" resultMap="staffVehicleMap">
+		select * from t_staffVehicle where t_staffVehicle.carId = #{carId}
+	</select>
+
+	<!-- 更新职工车辆记录 -->
+	<update id="updateStaffVehicle" parameterType="staffVehicle">
+		update t_staffVehicle set teacherName=#{teacherName},carNo=#{carNo},vehiclePhoto=#{vehiclePhoto},leftDays=#{leftDays},carDesc=#{carDesc} where carId = #{carId}
+	</update>
+
+	<!-- 删除职工车辆记录 -->
+	<delete id="deleteStaffVehicle" parameterType="int">
+		delete from t_staffVehicle where carId=#{carId}
+	</delete>
+
+</mapper>

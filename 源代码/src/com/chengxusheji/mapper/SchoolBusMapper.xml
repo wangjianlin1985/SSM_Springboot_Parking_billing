@@ -1,0 +1,48 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.SchoolBusMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加校车车辆记录 -->
+	<insert id="addSchoolBus" parameterType="schoolBus">
+		insert into t_schoolBus(busNo,busPhoto,busModel,buyDate,recentRepairTime,busDesc) values 
+		(#{busNo},#{busPhoto},#{busModel},#{buyDate},#{recentRepairTime},#{busDesc})
+	</insert>
+
+	<!-- 按照查询条件分页查询校车车辆记录 -->
+	<select id="querySchoolBus" resultMap="schoolBusMap" >
+		select t_schoolBus.* from t_schoolBus ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="schoolBusMap" type="schoolBus">
+        <id property="busId" column="busId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有校车车辆记录 -->
+	<select id="querySchoolBusList" resultMap="schoolBusMap" >
+		select t_schoolBus.* from t_schoolBus ${where}
+	</select>
+
+    <!-- 按照查询条件的校车车辆记录数 -->
+	<select id="querySchoolBusCount" resultType="int">
+		select count(*) from t_schoolBus ${where}
+	</select>
+
+	<!-- 根据主键查询某个校车车辆记录 -->
+	<select id="getSchoolBus" parameterType="int" resultMap="schoolBusMap">
+		select * from t_schoolBus where t_schoolBus.busId = #{busId}
+	</select>
+
+	<!-- 更新校车车辆记录 -->
+	<update id="updateSchoolBus" parameterType="schoolBus">
+		update t_schoolBus set busNo=#{busNo},busPhoto=#{busPhoto},busModel=#{busModel},buyDate=#{buyDate},recentRepairTime=#{recentRepairTime},busDesc=#{busDesc} where busId = #{busId}
+	</update>
+
+	<!-- 删除校车车辆记录 -->
+	<delete id="deleteSchoolBus" parameterType="int">
+		delete from t_schoolBus where busId=#{busId}
+	</delete>
+
+</mapper>
